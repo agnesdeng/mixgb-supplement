@@ -1,5 +1,5 @@
 # supplement
-This folder contains all the supplementary materials for the "mixgb: multiple imputation through XGBoost" paper.
+This folder contains all the supplementary materials for the "mixgb: multiple imputation through XGBoost" paper <a href='http://arxiv.org/abs/2106.01574'>arXiv:2106.01574</a>.
 
 In addition to the R code for the simulation study, we provide R scripts for generating all the tables and figures in this paper. 
 
