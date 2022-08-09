@@ -15,7 +15,7 @@ sum_simtime <- function(result) {
   n_p <- str_extract(str_extract(res.string, "p[[:alnum:]]*$"), "[^npL]+")
 
   result$n_obs <- paste(n_obs, "samples")
-  result$n_p <- paste(n_p, "features")
+  result$n_p <- paste(n_p, "expvars")
 
   result
 }

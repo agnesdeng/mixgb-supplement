@@ -58,7 +58,7 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
     reds[2]
   )
 
-
+  
   # colors<-c("black","gray30",colors)
   colors <- c("black", "gray30", colors)
   if (show.vertical) {
@@ -77,7 +77,7 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
       theme(
         axis.title.x = element_text(size = 14, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
         axis.title.y = element_text(size = 14, margin = margin(0, r = 10, 0, l = 10)),
-        axis.text.x = element_text(size = 8, angle = 45, hjust = 1),
+        axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
         strip.text.x = element_text(size = 10, face = "bold"),
         panel.spacing.y = unit(0.1, "in"),
         legend.position = "bottom",
@@ -98,16 +98,17 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
       # facet_wrap(vars(Estimates))+
       scale_color_manual(values = colors) +
       scale_fill_manual(values = colors) +
+      scale_x_continuous(breaks = breaks_fun)+
       scale_y_discrete(labels = labels.names) +
       guides(color = "none", fill = "none") +
       labs(x = "Coefficients") +
       theme(
-        axis.title.x = element_text(size = 18, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-        axis.title.y = element_text(size = 18, margin = margin(0, r = 10, 0, l = 10)),
-        axis.text.x = element_text(size = 10),
-        axis.text.y = element_text(size = 14, face = "bold"),
-        strip.text.x = element_text(size = 14, face = "bold"),
-        panel.spacing.x = unit(0.2, "in"),
+        axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+        axis.title.y = element_text(size = 22, margin = margin(0, r = 10, 0, l = 10)),
+        axis.text.x = element_text(size = 16),
+        axis.text.y = element_text(size = 20),
+        strip.text.x = element_text(size = 17),
+        panel.spacing.x = unit(0.3, "in"),
         panel.spacing.y = unit(0.2, "in"),
         legend.position = "bottom",
         legend.box = "horizontal",
@@ -121,3 +122,22 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
       geom_vline(data = true.line, aes(xintercept = mean.hat))
   }
 }
+
+
+breaks_fun <- function(x){ 
+ 
+   if ( max(x) > 1){
+    c(0.4,0.7,1)
+  }else if ( min(x)< -2.9){
+    c(-3,-2.4,-1.6)
+  }else if( min(x)< -1.9){
+    c(-2,-1.4,-0.8)
+  }else if ( min(x)< -0.9){
+    c(-1,-0.7,-0.4)
+  }else{
+    c(-0.4,-0.1,0.2)
+  }
+
+}
+
+

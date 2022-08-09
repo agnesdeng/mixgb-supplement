@@ -35,7 +35,7 @@ plot_simtime <- function(data, color = colors, compare = "all", log.time = F, fa
   if (facet.samples) {
     ggplot(data, aes(x = n_p, y = time, group = Methods, shape = Methods, linetype = Methods)) +
       geom_line(aes(colour = Methods, linetype = Methods), size = 1) +
-      geom_point(aes(colour = Methods, shape = Methods, fill = Methods), size = 3) +
+      geom_point(aes(colour = Methods, shape = Methods, fill = Methods), size = 4) +
       facet_grid(~n_obs) +
       ylab(y.titles) +
       xlab("Number of features") +
@@ -43,22 +43,23 @@ plot_simtime <- function(data, color = colors, compare = "all", log.time = F, fa
       scale_fill_manual(values = colors) +
       scale_shape_manual(values = shapes) +
       scale_linetype_manual(values = lines) +
+      #Note 10 explanatory variables = 11 features in the dataset
       scale_x_discrete(labels = c(
-        "10 features" = "10", "30 features" = "30",
-        "50 features" = "50"
+        "10 expvars" = "11", "30 expvars" = "31",
+        "50 expvars" = "51"
       )) +
       theme(
-        axis.title.x = element_text(face = "bold", size = 16),
-        axis.title.y = element_text(face = "bold", size = 16),
-        axis.text.x = element_text(face = "bold", size = 14),
-        axis.text.y = element_text(face = "bold", size = 14),
-        strip.text = element_text(face = "bold", size = 16), # change facet text size
+        axis.title.x = element_text(size = 22, margin = margin(t = 15, r = 0, b = 0, l = 0), ),
+        axis.title.y = element_text(size = 22, margin = margin(0, r = 15, 0, l = 0)),
+        axis.text.x = element_text(size = 20),
+        axis.text.y = element_text( size = 20),
+        strip.text = element_text(size = 22), # change facet text size
         legend.position = "right",
         legend.key.size = unit(2, "cm"), # change legend key size
         legend.key.height = unit(2, "cm"), # change legend key height
         legend.key.width = unit(2, "cm"), # change legend key width
-        legend.title = element_text(face = "bold", size = 18), # change legend title font size
-        legend.text = element_text(face = "bold", size = 16)
+        legend.title = element_text(face = "bold", size = 22), # change legend title font size
+        legend.text = element_text(size = 20)
       )
   } else {
     # facet=="features"

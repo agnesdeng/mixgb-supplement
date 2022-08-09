@@ -51,7 +51,7 @@ p <- ggplot(combine.df, aes(x = x, y = y, color = type)) +
   facet_grid(~type) +
   theme(
     strip.text.x = element_text(size = 16),
-    axis.text = element_text(size = 13),
+    axis.text = element_text(size = 16),
     axis.title = element_text(size = 18)
   ) +
   theme(legend.position = "none") +
@@ -63,7 +63,7 @@ dir.path <- "C:/Users/agnes/Desktop/mixgb-paper/jcgs"
 
 jpeg(
   filename = file.path(dir.path, "figures/pmm.jpeg"),
-  width = 12, height = 4, units = "in", res = 300, pointsize = 1
+  width = 12, height = 4, units = "in", res = 300, pointsize = 10
 )
 print(p)
 dev.off()

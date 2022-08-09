@@ -238,11 +238,16 @@ p1 <- plot_hist(
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
 
-p1 <- p1 + theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank()
-)
-
+p1 <- p1+scale_y_continuous(breaks = c(0,0.25,0.5))+
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size =18 ,face = "plain"),
+    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+  )
 
 jpeg(
   filename = file.path(dir.path, "figures/imputemean1.jpeg"),
@@ -263,10 +268,18 @@ p1 <- plot_hist(
   imputation.list = mice_sample.data, var.name = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
-p1 <- p1 + theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank()
-)
+
+
+p1 <- p1+
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 18,face = "plain"),
+    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+  )
 jpeg(
   filename = file.path(dir.path, "figures/imputesample1.jpeg"),
   width = 15, height = 2, units = "in", res = 300, pointsize = 1
@@ -278,10 +291,22 @@ p2 <- plot_2num(
   imputation.list = mice_sample.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
-p2 <- p2 + theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank()
-)
+
+p2 <- p2+
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 18,face = "plain"),
+    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+  )
+
+
+
+  
 jpeg(
   filename = file.path(dir.path, "figures/imputesample2.jpeg"),
   width = 15, height = 2, units = "in", res = 300, pointsize = 1
@@ -312,25 +337,64 @@ p5 <- plot_2num(
   original.data = withNA.df, true.data = nwts, color.pal = mixgb_boot.colors
 )
 
-p1 <- p1 + theme(
+p1 <- p1+
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 18,face = "plain"),
+    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 18),
+    axis.text.y = element_text(size = 18),
+  )
+
+p2 <- p2 + 
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
   plot.title = element_blank(),
-  plot.subtitle = element_blank()
+  plot.subtitle = element_blank(),
+  strip.text = element_text(size = 18,face = "plain"),
+  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+  axis.text.x = element_text(size = 18),
+  axis.text.y = element_text(size = 18),
 )
-p2 <- p2 + theme(
+
+p3 <- p3 + 
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
   plot.title = element_blank(),
-  plot.subtitle = element_blank()
+  plot.subtitle = element_blank(),
+  strip.text = element_text(size = 18,face = "plain"),
+  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+  axis.text.x = element_text(size = 18),
+  axis.text.y = element_text(size = 18),
 )
-p3 <- p3 + theme(
+
+p4 <- p4 + 
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
   plot.title = element_blank(),
-  plot.subtitle = element_blank()
+  plot.subtitle = element_blank(),
+  strip.text = element_text(size = 18,face = "plain"),
+  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+  axis.text.x = element_text(size = 18),
+  axis.text.y = element_text(size = 18),
 )
-p4 <- p4 + theme(
+
+p5 <- p5 + 
+  scale_x_continuous(breaks = c(0,2000,4000))+
+  theme(
   plot.title = element_blank(),
-  plot.subtitle = element_blank()
-)
-p5 <- p5 + theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank()
+  plot.subtitle = element_blank(),
+  strip.text = element_text(size = 18,face = "plain"),
+  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
+  axis.text.x = element_text(size = 18),
+  axis.text.y = element_text(size = 18),
 )
 
 combinescatter <- ggarrange(p1, p2, p3, p4, p5, nrow = 5)
