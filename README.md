@@ -1,4 +1,4 @@
-# supplement
+# Supplement
 This folder contains all supplementary materials for the paper "Multiple Imputation Through XGBoost" <a href='http://arxiv.org/abs/2106.01574'>arXiv:2106.01574</a>.
 
 In addition to the R code for the simulation study, we provide R scripts for generating all the tables and figures in this paper. 
@@ -25,7 +25,7 @@ This folde contains R code for evaluating the computational time for real datase
 This folde contains R code for evaluating the computational time for continuous and categorical data using simulated data in Section 4. For more details, please refer to the README.md file inside this folder.
 
 
-## file: NWTS.R
+## File: NWTS.R
 The R script **NWTS.R** is used to create Table 4, Figure 7, Figure 8, and Figure 9 in Section 5.
 
 
