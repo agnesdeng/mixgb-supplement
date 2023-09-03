@@ -16,7 +16,7 @@ sim_mixgb <- function(full.df, bootstrap = FALSE, nthread = 16L, nrounds = 100, 
   imp.set <- paste("m", 1:m, sep = "")
   colnames(m.coefs) <- imp.set
 
-  Measures <- c("comb.coefs", "total", "t.se", "ci.lower", "ci.upper", "within", "between", "missinfo", "lambda")
+  Measures <- c("comb.coefs", "total", "b.se", "ci.lower", "ci.upper", "within", "between", "missinfo", "lambda")
   colnames(result.list) <- Measures
 
   hat.coefs <- rep(NA, p * runs)

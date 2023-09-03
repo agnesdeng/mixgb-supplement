@@ -5,7 +5,7 @@ library(mixgb)
 
 
 # set working directory to the folder supplement---------------------------------------------------
-setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement")
+setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/supplement")
 
 # allstate dataset (train.csv) can be downloaded from:
 # https://www.kaggle.com/competitions/allstate-claims-severity/data
@@ -22,24 +22,25 @@ colSums(is.na(withNA.df))
 
 
 cpu.params<- list(
-  subsample = 1,
+  max_depth = 3, gamma = 0, eta = 0.3, min_child_weight = 1, subsample = 1, colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
   tree_method = "hist"
 )
 
+
 gpu.params <- list(
-  nthread = 1L,
-  subsample = 1,
+  nthread = 1L, max_depth = 3, gamma = 0, eta = 0.3, min_child_weight = 1, subsample = 1, colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
   tree_method = "gpu_hist"
 )
 
-subcpu.params <- list(
-  subsample = 0.7,
+
+subcpu.params<- list(
+  max_depth = 3, gamma = 0, eta = 0.3, min_child_weight = 1, subsample = 0.7, colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
   tree_method = "hist"
 )
 
+
 subgpu.params <- list(
-  nthread = 1L,
-  subsample = 0.7,
+  nthread = 1L, max_depth = 3, gamma = 0, eta = 0.3, min_child_weight = 1, subsample = 0.7, colsample_bytree = 1, colsample_bylevel = 1, colsample_bynode = 1,
   tree_method = "gpu_hist"
 )
 
@@ -73,7 +74,7 @@ allstate.time <- microbenchmark(
 
 allstate.time
 allstate.sum <- summary(allstate.time)
-
+allstate.sum
 
 saveRDS(allstate.time, file = "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/datatime/result/allstate0.rds")
 saveRDS(allstate.sum, file = "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/datatime/result/allstate.rds")

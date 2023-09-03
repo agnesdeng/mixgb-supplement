@@ -5,7 +5,7 @@ library(mixgb)
 library(microbenchmark)
 
 # set working directory to the folder simtime---------------------------------------------------
-setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/simtime")
+setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/supplement/simtime")
 
 source("data/create_cat.R")
 source("data/create_MCAR.R")

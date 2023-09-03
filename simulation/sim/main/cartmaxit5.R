@@ -1,8 +1,8 @@
 # set working directory to the folder simulation---------------------------------------------------
 
 
-# server
-setwd("/data/users/yden863/simulation")
+# server 
+setwd("/path_to_directory/simulation")
 
 source("sim/common.R")
 library(mice)

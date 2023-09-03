@@ -1,5 +1,3 @@
-
-
 library(MASS)
 library(bindata)
 library(GenOrd)

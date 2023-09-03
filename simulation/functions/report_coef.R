@@ -35,15 +35,15 @@ report_coef <- function(sim.output) {
       dplyr::mutate(estimates = factor(estimates, levels = coef.names)) %>%
       dplyr::mutate(
         bias = comb.coefs - hat.coefs,
-        #ciwidth = ci.upper - ci.lower,
-        # coverage=ci.lower< hat.coefs & hat.coefs <ci.upper,
-        coverage = ci.lower < true.coefs & true.coefs < ci.upper,
+        # ciwidth = ci.upper - ci.lower,
+        coverage = ci.lower < hat.coefs & hat.coefs < ci.upper,
+        # coverage = ci.lower < true.coefs & true.coefs < ci.upper,
         .before = comb.coefs
       ) %>%
       group_by(estimates) %>%
       dplyr::summarise(
         mean.bias = mean(bias),
-        #mean.ciwidth = mean(ciwidth),
+        # mean.ciwidth = mean(ciwidth),
         mean.coverage = mean(coverage),
         mean.total = mean(total),
         mean.within = mean(within),
@@ -65,7 +65,7 @@ report_coef <- function(sim.output) {
         Between = mean.between,
         Within = mean.within,
         Coverage = mean.coverage,
-        #Width = mean.ciwidth,
+        # Width = mean.ciwidth,
         Missinfo = mean.missinfo
       ) %>%
       dplyr::mutate(
@@ -79,7 +79,7 @@ report_coef <- function(sim.output) {
         True.Total = True.Between + True.Within, .before = True.Between
       ) %>%
       # dplyr::select(Bias,Total,True.Total,Within,True.Within,Between,True.Between,Coverage,Width,Missinfo)
-      #dplyr::select(Bias, Total, True.Total, Within, True.Within, Between, True.Between, Coverage, Width)
+      # dplyr::select(Bias, Total, True.Total, Within, True.Within, Between, True.Between, Coverage, Width)
       dplyr::select(Bias, Total, True.Total, Within, True.Within, Between, True.Between, Coverage)
     # note: between here is after adjustment for small m, ie. between=(1+1/m)*between
     # rubin paper: multiple imputation after 18 years  page 482

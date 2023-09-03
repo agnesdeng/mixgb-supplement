@@ -13,7 +13,7 @@ sim_mice <- function(full.df, runs = 5, m = 5, maxit = 1, seedset = NULL, model.
   imp.set <- paste("m", 1:m, sep = "")
   colnames(m.coefs) <- imp.set
 
-  Measures <- c("comb.coefs", "total", "t.se", "ci.lower", "ci.upper", "within", "between", "missinfo", "lambda")
+  Measures <- c("comb.coefs", "total", "b.se", "ci.lower", "ci.upper", "within", "between", "missinfo", "lambda")
   colnames(result.list) <- Measures
 
   hat.coefs <- rep(NA, p * runs)
@@ -64,7 +64,6 @@ sim_mice <- function(full.df, runs = 5, m = 5, maxit = 1, seedset = NULL, model.
 
 
     if (r %% 100 == 0) {
-
       # save results every n runs
       sim.output <- list("m.coefs" = m.coefs, "result" = result.list, "sim.time" = sim.time, "hat.coefs" = hat.coefs, "hat.var" = hat.var, "estimates" = estimates, "cp.coefs" = cp.coefs, "cp.var" = cp.var)
       filename <- paste(folder.dir, paste("/runs", r, sep = ""), sep = "")

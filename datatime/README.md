@@ -15,12 +15,12 @@ The dataset should be placed in the `allstate` folder.
 
 
 ##Folder: higgs
-This folder contains the R script `higgs1M.R` to record the computational time for the `higgs1M` dataset. Since the dataset is large, we do not include it here. Users can download the higgs data (HIGGS.csv) from UCI Machine Learning Repository: https://archive.ics.uci.edu/ml/datasets/HIGGS
+This folder contains the R script `higgs1M.R` to record the computational time for the `higgs1M` dataset. Since the dataset is large, we do not include it here. Users can download the higgs data (HIGGS.csv) from UCI Machine Learning Repository: https://archive.ics.uci.edu/dataset/280/higgs
 
 The dataset should be placed in the `higgs` folder.
 
 
 ##Folder: credit
-This folder contains the R script `credit.R` to record the computational time for the `credit` dataset. Since the dataset is not big, we include it here. Users can also download the credit data from UCI Machine Learning Repository: https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients
+This folder contains the R script `credit.R` to record the computational time for the `credit` dataset. Since the dataset is not big, we include it here. Users can also download the credit data from UCI Machine Learning Repository: https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients
 
 The dataset should be placed in the `credit` folder.

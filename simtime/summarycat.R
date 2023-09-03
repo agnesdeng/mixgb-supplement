@@ -1,6 +1,6 @@
-
 # set working directory to the folder simtime---------------------------------------------------
-setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/simtime")
+setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/supplement/simtime")
+dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/jcgs/figures"
 
 library(stringr)
 library(ggplot2)
@@ -86,10 +86,10 @@ plot_simtime(data = combine.df, color = colors, compare = "all", log.time = T, f
 p1 <- plot_simtime(data = combine.df, color = colors, compare = "all", log.time = T, facet.samples = T)
 
 
-dir.folder <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/jcgs"
+
 jpeg(
-  filename = file.path(dir.folder, "figures/timecat.jpeg"),
-  width = 15, height = 6, units = "in", res = 300, pointsize = 1
+  filename = file.path(dir.path, "/timecat.jpeg"),
+  width = 16, height = 5.5, units = "in", res = 300, pointsize = 1
 )
 grid.draw(p1, recording = T)
 dev.off()

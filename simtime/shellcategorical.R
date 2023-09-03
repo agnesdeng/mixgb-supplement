@@ -1,6 +1,6 @@
 
 # set working directory to the folder simtime/categorical---------------------------------------------------
-setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/simtime/categorical")
+setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/supplement/simtime/categorical")
 
 
 #Run the R script for n=1e3

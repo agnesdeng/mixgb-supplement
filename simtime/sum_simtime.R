@@ -19,4 +19,3 @@ sum_simtime <- function(result) {
 
   result
 }
-

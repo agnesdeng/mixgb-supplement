@@ -3,7 +3,7 @@
 # set working directory to the folder simulation---------------------------------------------------
 
 # server
-setwd("/data/users/yden863/simulation")
+setwd("/path_to_directory/simulation")
 
 
 source("sim/common.R")

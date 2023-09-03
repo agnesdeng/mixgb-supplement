@@ -1,3 +1,4 @@
+dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/jcgs/figures"
 
 library(mixgb)
 library(ggplot2)
@@ -50,20 +51,21 @@ p <- ggplot(combine.df, aes(x = x, y = y, color = type)) +
   geom_point() +
   facet_grid(~type) +
   theme(
-    strip.text.x = element_text(size = 16),
-    axis.text = element_text(size = 16),
-    axis.title = element_text(size = 18)
+    strip.text.x = element_text(size = 22),
+    axis.text = element_text(size = 21),
+    axis.title = element_text(size = 26)
   ) +
   theme(legend.position = "none") +
   scale_color_manual(values = c("gray40", "gray20", c("#ffa9f3", "#ed88e1", "#db67ce")))
 
-p
 
-dir.path <- "C:/Users/agnes/Desktop/mixgb-paper/jcgs"
+
+
+
 
 jpeg(
-  filename = file.path(dir.path, "figures/pmm.jpeg"),
-  width = 12, height = 4, units = "in", res = 300, pointsize = 10
+  filename = file.path(dir.path, "/pmm.jpeg"),
+  width = 16, height = 4.5, units = "in", res = 300, pointsize = 12
 )
 print(p)
 dev.off()

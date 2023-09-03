@@ -7,6 +7,10 @@ library(ggpubr)
 library(grid)
 library(xtable)
 library(survival)
+library(cowplot)
+
+
+dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/jcgs/figures"
 
 # Load the NWTS dataset from the "addhazard" package ----------------------
 data(nwtsco)
@@ -105,13 +109,13 @@ sum(complete.cases(withNA.df))
 
 
 
-#full data
+# full data
 model.form <- as.formula(Surv(trel, relaps) ~ histol + +histol:age1 + histol:age2 + age1 + age2 + stage1 + tumdiam + stage1:tumdiam)
 full.fit <- coxph(model.form, data = nwts)
 full.coefs <- coef(full.fit)
 full.coefs
 
-#complete cases
+# complete cases
 cp.fit <- coxph(model.form, data = withNA.df)
 cp.coefs <- coef(cp.fit)
 cp.coefs
@@ -192,7 +196,7 @@ mixgb_sub.coefs
 combine.coefs <- cbind(full.coefs, cp.coefs, mice.coefs, cart.coefs, rf.coefs, mixgb.coefs, mixgb_sub.coefs)
 combine.coefs
 
-#Table 4
+# Table 4
 xtable(combine.coefs)
 
 
@@ -200,7 +204,7 @@ xtable(combine.coefs)
 
 
 
-#plots for imputed values -----------------------------------------------
+# plots for imputed values -----------------------------------------------
 
 blues <- c("#00ddff", "#0160c9", "#020da5")
 # mice.cart
@@ -218,7 +222,13 @@ rf.colors <- c("gray40", "gray20", rep(greens[2], 5))
 mixgb.colors <- c("gray40", "gray20", rep(pinks[2], 5))
 mixgb_sub.colors <- c("gray40", "gray20", rep(reds[2], 5))
 
-# #Figure 6:  mean imputation
+
+
+
+
+#Figure 7:  mean imputation
+
+
 
 single.imp <- withNA.df %>%
   mutate(tumdiam = ifelse(is.na(tumdiam), mean(tumdiam, na.rm = TRUE), tumdiam))
@@ -236,177 +246,240 @@ mean.data <- lapply(mean.data, function(x) {
 
 
 
-dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/jcgs"
+
+group_rename <- c(
+  Observed = "observed",
+  MaskedTrue = "masked true",
+  m1 = "m1",
+  m2 = "m2",
+  m3 = "m3",
+  m4 = "m4",
+  m5 = "m5"
+)
+
+
+
 
 p1 <- plot_hist(
   imputation.list = mean.data, var.name = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
 
-p1 <- p1+scale_y_continuous(breaks = c(0,0.25,0.5))+
+p1 <- p1 + scale_y_continuous(breaks = c(0, 0.25, 0.5)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
   theme(
     plot.title = element_blank(),
     plot.subtitle = element_blank(),
-    strip.text = element_text(size =18 ,face = "plain"),
-    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-    axis.text.x = element_text(size = 18),
-    axis.text.y = element_text(size = 18),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
   )
 
-jpeg(
-  filename = file.path(dir.path, "figures/imputemean1.jpeg"),
-  width = 15, height = 2.5, units = "in", res = 300, pointsize = 1
-)
-
-grid::grid.draw(p1, recording = T)
-dev.off()
 
 
 
-# Figure 7: impute by sampling
+# Figure 8: impute by sampling
 set.seed(2022)
 mice.sample <- mice(data = withNA.df, printFlag = FALSE, m = 5, maxit = 5, method = "sample")
 mice_sample.data <- complete(mice.sample, action = "all")
 
-p1 <- plot_hist(
+p2 <- plot_hist(
   imputation.list = mice_sample.data, var.name = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
 
 
-p1 <- p1+
+p2 <- p2 +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
   theme(
     plot.title = element_blank(),
     plot.subtitle = element_blank(),
-    strip.text = element_text(size = 18,face = "plain"),
-    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-    axis.text.x = element_text(size = 18),
-    axis.text.y = element_text(size = 18),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
   )
-jpeg(
-  filename = file.path(dir.path, "figures/imputesample1.jpeg"),
-  width = 15, height = 2.5, units = "in", res = 300, pointsize = 1
-)
-grid::grid.draw(p1, recording = T)
-dev.off()
 
-p2 <- plot_2num(
+
+p3 <- plot_2num(
   imputation.list = mice_sample.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = c("gray40", "gray20", rep("black", 5))
 )
 
-p2 <- p2+
-  scale_x_continuous(breaks = c(0,2000,4000))+
+p3 <- p3 +
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
   theme(
     plot.title = element_blank(),
     plot.subtitle = element_blank(),
-    strip.text = element_text(size = 18,face = "plain"),
-    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-    axis.text.x = element_text(size = 18),
-    axis.text.y = element_text(size = 18),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
   )
 
 
 
 
-jpeg(
-  filename = file.path(dir.path, "figures/imputesample2.jpeg"),
-  width = 15, height = 2.5, units = "in", res = 300, pointsize = 1
-)
-grid::grid.draw(p2, recording = T)
-dev.off()
 
 
-# Figure 8: impute by MI methods
-p1 <- plot_2num(
+
+# Figure 9: impute by MI methods
+p4 <- plot_2num(
   imputation.list = mice.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = mice.colors
 )
-p2 <- plot_2num(
+p5 <- plot_2num(
   imputation.list = cart.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = cart.colors
 )
-p3 <- plot_2num(
+p6 <- plot_2num(
   imputation.list = rf.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = rf.colors
 )
-p4 <- plot_2num(
+p7 <- plot_2num(
   imputation.list = mixgb.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = mixgb.colors
 )
-p5 <- plot_2num(
+p8 <- plot_2num(
   imputation.list = mixgb_sub.data, var.x = "specwgt", var.y = "tumdiam",
   original.data = withNA.df, true.data = nwts, color.pal = mixgb_sub.colors
 )
 
-p1 <- p1+
-  scale_x_continuous(breaks = c(0,2000,4000))+
+p4 <- p4 +
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
   theme(
     plot.title = element_blank(),
     plot.subtitle = element_blank(),
-    strip.text = element_text(size = 18,face = "plain"),
-    axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-    axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-    axis.text.x = element_text(size = 18),
-    axis.text.y = element_text(size = 18),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
   )
 
-p2 <- p2 +
-  scale_x_continuous(breaks = c(0,2000,4000))+
-  theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank(),
-  strip.text = element_text(size = 18,face = "plain"),
-  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-  axis.text.x = element_text(size = 18),
-  axis.text.y = element_text(size = 18),
-)
-
-p3 <- p3 +
-  scale_x_continuous(breaks = c(0,2000,4000))+
-  theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank(),
-  strip.text = element_text(size = 18,face = "plain"),
-  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-  axis.text.x = element_text(size = 18),
-  axis.text.y = element_text(size = 18),
-)
-
-p4 <- p4 +
-  scale_x_continuous(breaks = c(0,2000,4000))+
-  theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank(),
-  strip.text = element_text(size = 18,face = "plain"),
-  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-  axis.text.x = element_text(size = 18),
-  axis.text.y = element_text(size = 18),
-)
-
 p5 <- p5 +
-  scale_x_continuous(breaks = c(0,2000,4000))+
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
   theme(
-  plot.title = element_blank(),
-  plot.subtitle = element_blank(),
-  strip.text = element_text(size = 18,face = "plain"),
-  axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-  axis.title.y = element_text(size = 22, margin = margin(0, r = 5, 0, l = 0)),
-  axis.text.x = element_text(size = 18),
-  axis.text.y = element_text(size = 18),
-)
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
+  )
 
-combinescatter <- ggarrange(p1, p2, p3, p4, p5, nrow = 5)
+p6 <- p6 +
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
+  )
+
+p7 <- p7 +
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
+  )
+
+p8 <- p8 +
+  scale_x_continuous(breaks = c(0, 2000, 4000)) +
+  facet_grid(cols = vars(m.set), labeller = labeller(m.set = group_rename)) +
+  theme(
+    plot.title = element_blank(),
+    plot.subtitle = element_blank(),
+    strip.text = element_text(size = 23, face = "plain"),
+    axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+    axis.title.y = element_text(size = 26, margin = margin(0, r = 5, 0, l = 0)),
+    axis.text.x = element_text(size = 21),
+    axis.text.y = element_text(size = 21),
+    panel.spacing.x = unit(0.4, "cm")
+  )
+
+
+#print out figures
+aligned <- align_plots(p1, p2, p3, p4, p5, p6, p7, p8, align = "v")
 
 jpeg(
-  filename = file.path(dir.path, "figures/combinescatter.jpeg"),
-  width = 15, height = 12.5, units = "in", res = 300, pointsize = 1
+  filename = file.path(dir.path, "/imputemean.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
 )
-grid::grid.draw(combinescatter, recording = T)
+grid::grid.draw(aligned[[1]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputesample1.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[2]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputesample2.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[3]], recording = T)
+dev.off()
+
+
+jpeg(
+  filename = file.path(dir.path, "/imputemice.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[4]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputecart.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[5]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputeranger.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[6]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputemixgb.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[7]], recording = T)
+dev.off()
+
+jpeg(
+  filename = file.path(dir.path, "/imputemixgbsub.jpeg"),
+  width = 16, height = 2.6, units = "in", res = 300, pointsize = 1
+)
+grid::grid.draw(aligned[[8]], recording = T)
 dev.off()

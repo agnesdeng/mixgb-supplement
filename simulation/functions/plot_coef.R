@@ -1,4 +1,4 @@
-plot_coef <- function(sim.output, show.vertical = TRUE) {
+plot_coef <- function(sim.output) {
   n_output <- length(sim.output)
   n_estimates <- length(sim.output[[1]]$estimates)
 
@@ -22,7 +22,6 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
       hat.coefs = sim.output[[maxruns.idx]]$hat.coefs,
       cp.coefs = sim.output[[maxruns.idx]]$cp.coefs
     ) %>%
-    dplyr::slice(n = 1:(hat.runs * n_estimates)) %>%
     tidyr::pivot_longer(
       !Estimates,
       names_to = "Methods",
@@ -40,7 +39,7 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
     dplyr::group_by(Estimates) %>%
     dplyr::summarise(mean.hat = mean(coefs))
 
-  labels.names <- c("empirical.true", "complete.cases", "mice-default", "mice-cart", "mice-ranger", "mixgb", "mixgb-sub")
+  labels.names <- c("empirical true", "complete cases", "mice-default", "mice-cart", "mice-ranger", "mixgb", "mixgb-sub")
 
 
   # light to dark
@@ -58,86 +57,50 @@ plot_coef <- function(sim.output, show.vertical = TRUE) {
     reds[2]
   )
 
-  
+
   # colors<-c("black","gray30",colors)
   colors <- c("black", "gray30", colors)
-  if (show.vertical) {
-    ggplot(data = coefs.tb, aes(x = Methods, y = coefs, color = Methods, fill = Methods)) +
-      # ggdist::stat_halfeye(adjust = 0.5, justification = -0.2, .width = 0, point_colour = NA) +
-      # ggdist::stat_halfeye()+
-      geom_boxplot(aes(fill = Methods), width = 0.2, outlier.color = NA, alpha = 0.5) +
-      facet_wrap(vars(Estimates), scale = "free_y", nrow = 2) +
-      # facet_wrap(vars(Estimates)) +
-      scale_x_discrete(labels = labels.names) +
-      scale_color_manual(values = colors, labels = labels.names) +
-      scale_fill_manual(values = colors, labels = labels.names) +
-      # guides(color = "none", fill = "none") +
-      guides(color = guide_legend(nrow = 1)) +
-      labs(y = "Coefficients") +
-      theme(
-        axis.title.x = element_text(size = 14, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-        axis.title.y = element_text(size = 14, margin = margin(0, r = 10, 0, l = 10)),
-        axis.text.x = element_text(size = 10, angle = 45, hjust = 1),
-        strip.text.x = element_text(size = 10, face = "bold"),
-        panel.spacing.y = unit(0.1, "in"),
-        legend.position = "bottom",
-        legend.box = "horizontal",
-        legend.spacing.x = unit(0.17, "in"),
-        legend.title = element_text(face = "bold", size = 12),
-        legend.text = element_text(face = "bold", size = 10),
-        legend.key.width = unit(0.2, "in"),
-        legend.key.height = unit(0.3, "in"),
-        legend.text.align = 0
-      ) +
-      geom_hline(data = true.line, aes(yintercept = mean.hat))
+
+  ggplot(data = coefs.tb, aes(x = coefs, y = Methods, color = Methods, fill = Methods), labeller = label_parsed) +
+    geom_boxplot(aes(fill = Methods), width = 0.2, outlier.color = NA, alpha = 0.5) +
+    facet_wrap(vars(Estimates), scales = "free_x", nrow = 2, labeller = label_parsed) +
+    scale_color_manual(values = colors) +
+    scale_fill_manual(values = colors) +
+    scale_x_continuous(breaks = breaks_fun) +
+    scale_y_discrete(labels = labels.names) +
+    guides(color = "none", fill = "none") +
+    labs(x = "Coefficient", y = "Method") +
+    theme(
+      axis.title.x = element_text(size = 26, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
+      axis.title.y = element_text(size = 26, margin = margin(0, r = 10, 0, l = 10)),
+      axis.text.x = element_text(size = 21),
+      axis.text.y = element_text(size = 23),
+      strip.text.x = element_text(size = 18),
+      panel.spacing.x = unit(0.35, "in"),
+      panel.spacing.y = unit(0.2, "in"),
+      legend.position = "bottom",
+      legend.box = "horizontal",
+      legend.spacing.x = unit(0.17, "in"),
+      legend.title = element_text(face = "bold", size = 12),
+      legend.text = element_text(face = "bold", size = 10),
+      legend.key.width = unit(0.2, "in"),
+      legend.key.height = unit(0.3, "in"),
+      legend.text.align = 0
+    ) +
+    geom_vline(data = true.line, aes(xintercept = mean.hat))
+}
+
+
+breaks_fun <- function(x) {
+  if (max(x) > 1) {
+    c(0.4, 0.7, 1)
+  } else if (min(x) < -2.9) {
+    c(-3, -2.4, -1.6)
+  } else if (min(x) < -1.9) {
+    c(-2, -1.4, -0.8)
+  } else if (min(x) < -0.9) {
+    c(-1, -0.7, -0.4)
   } else {
-    ggplot(data = coefs.tb, aes(x = coefs, y = Methods, color = Methods, fill = Methods), labeller = label_parsed) +
-      # ggdist::stat_halfeye(adjust = 0.5, justification = -0.2, .width = 0, point_colour = NA) +
-      geom_boxplot(aes(fill = Methods), width = 0.2, outlier.color = NA, alpha = 0.5) +
-      facet_wrap(vars(Estimates), scales = "free_x", nrow = 2, labeller = label_parsed) +
-      # facet_wrap(vars(Estimates))+
-      scale_color_manual(values = colors) +
-      scale_fill_manual(values = colors) +
-      scale_x_continuous(breaks = breaks_fun)+
-      scale_y_discrete(labels = labels.names) +
-      guides(color = "none", fill = "none") +
-      labs(x = "Coefficients") +
-      theme(
-        axis.title.x = element_text(size = 22, margin = margin(t = 10, r = 0, b = 0, l = 0), ),
-        axis.title.y = element_text(size = 22, margin = margin(0, r = 10, 0, l = 10)),
-        axis.text.x = element_text(size = 16),
-        axis.text.y = element_text(size = 20),
-        strip.text.x = element_text(size = 17),
-        panel.spacing.x = unit(0.3, "in"),
-        panel.spacing.y = unit(0.2, "in"),
-        legend.position = "bottom",
-        legend.box = "horizontal",
-        legend.spacing.x = unit(0.17, "in"),
-        legend.title = element_text(face = "bold", size = 12),
-        legend.text = element_text(face = "bold", size = 10),
-        legend.key.width = unit(0.2, "in"),
-        legend.key.height = unit(0.3, "in"),
-        legend.text.align = 0
-      ) +
-      geom_vline(data = true.line, aes(xintercept = mean.hat))
+    c(-0.4, -0.1, 0.2)
   }
 }
-
-
-breaks_fun <- function(x){ 
- 
-   if ( max(x) > 1){
-    c(0.4,0.7,1)
-  }else if ( min(x)< -2.9){
-    c(-3,-2.4,-1.6)
-  }else if( min(x)< -1.9){
-    c(-2,-1.4,-0.8)
-  }else if ( min(x)< -0.9){
-    c(-1,-0.7,-0.4)
-  }else{
-    c(-0.4,-0.1,0.2)
-  }
-
-}
-
-

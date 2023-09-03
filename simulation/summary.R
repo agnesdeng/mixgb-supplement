@@ -1,7 +1,8 @@
-
 # set working directory to the folder simulation---------------------------------------------------
 
-setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/supplement/simulation")
+setwd("C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/supplement/simulation")
+
+dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/v5/jcgs/figures"
 
 # load packages ------------------------------------------------------------
 
@@ -40,6 +41,34 @@ all.output <- list(
   "mixgb_sub.maxit1" = mixgb_sub.maxit1
 )
 
+
+
+
+# plot MI coefficient
+plot_coef(sim.output = all.output)
+# plot imputation variance
+plot_var(sim.output = all.output)
+
+
+source("functions/plot_coef.R")
+p1 <- plot_coef(sim.output = all.output)
+jpeg(
+  filename = file.path(dir.path, "/coefs.jpeg"),
+  width = 16, height = 7, units = "in", res = 300, pointsize = 12
+)
+grid.draw(p1, recording = T)
+dev.off()
+
+
+
+source("functions/plot_var.R")
+p1 <- plot_var(sim.output = all.output)
+jpeg(
+  filename = file.path(dir.path, "/var.jpeg"),
+  width = 16, height = 8, units = "in", res = 300, pointsize = 12
+)
+grid.draw(p1, recording = T)
+dev.off()
 
 
 # report ------------------------------------------------------------------
@@ -92,32 +121,3 @@ bias.result
 
 # summary of computational time for simulation study
 report_time(sim.output = all.output)
-
-
-
-
-# plot MI coefficient
-plot_coef(sim.output = all.output, show.vertical = F)
-# plot imputation variance
-plot_var(sim.output = all.output, show.vertical = F)
-
-
-# save figures
-dir.path <- "C:/Users/agnes/Desktop/phd-thesis/my-projects/mixgb-paper/last-version/jcgs/figures"
-p1 <- plot_coef(sim.output = all.output, show.vertical = F)
-jpeg(
-  filename = file.path(dir.path, "/coefs.jpeg"),
-  width = 15, height = 8, units = "in", res = 300, pointsize = 1
-)
-grid.draw(p1, recording = T)
-dev.off()
-
-
-
-p1 <- plot_var(sim.output = all.output, show.vertical = F)
-jpeg(
-  filename = file.path(dir.path, "/var.jpeg"),
-  width = 15, height = 8, units = "in", res = 300, pointsize = 1
-)
-grid.draw(p1, recording = T)
-dev.off()

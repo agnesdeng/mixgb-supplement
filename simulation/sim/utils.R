@@ -115,9 +115,12 @@ summary.miresult <- function(object, ..., alpha = 0.05, logeffect = FALSE) {
   out[, 1] <- coef(object)
   # total.var
   out[, 2] <- diag(object$variance)
-  # t.se
-  out[, 3] <- sqrt(diag(vcov(object)))
-  # CI use total variance
+
+  # b.se:  standard error using adjusted between variance
+  # out[, 3] <- sqrt(diag(vcov(object)))
+  out[, 3] <- sqrt(object$between)
+
+  # CI uses adjusted between variance
   out[, 4] <- out[, 1] - crit * out[, 3]
   out[, 5] <- out[, 1] + crit * out[, 3]
   #
